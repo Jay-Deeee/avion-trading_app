@@ -6,4 +6,8 @@ class User < ApplicationRecord
 
   has_many :portfolios
   has_many :transactions
+
+  validates :first_name, presence: true
+  validates :last_name, presence: true
+  validates :email, presence: true
 end
