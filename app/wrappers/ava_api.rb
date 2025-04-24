@@ -1,5 +1,5 @@
-require 'uri'
-require 'net/http'
+require "uri"
+require "net/http"
 
 class AvaApi
   def self.fetch_records(symbol)
@@ -10,7 +10,7 @@ class AvaApi
 
     request = Net::HTTP::Get.new(url)
     request["x-rapidapi-key"] = ENV["API_KEY"]
-    request["x-rapidapi-host"] = 'alpha-vantage.p.rapidapi.com'
+    request["x-rapidapi-host"] = "alpha-vantage.p.rapidapi.com"
 
     response = http.request(request)
     JSON.parse(response.body)

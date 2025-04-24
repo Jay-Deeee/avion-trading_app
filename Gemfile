@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem 'dotenv', groups: [:development, :test]
+gem "dotenv", groups: [ :development, :test ]
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.2", ">= 7.2.2.1"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
@@ -57,4 +57,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem 'devise', '~> 4.9', '>= 4.9.4'
+gem "devise", "~> 4.9", ">= 4.9.4"
