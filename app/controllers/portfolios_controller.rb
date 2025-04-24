@@ -1,6 +1,6 @@
 class PortfoliosController < ApplicationController
-  # before_action :set_category
-  # before_action :set_task, only: [:show, :edit, :update, :destroy]
+  # before_action :set_portfolio
+  # before_action :set_transaction, only: [:show, :edit, :update, :destroy]
   # rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   # rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
 
