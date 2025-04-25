@@ -9,4 +9,9 @@ Rails.application.routes.draw do
 
   resources :portfolios
   resources :transactions
+  
+  namespace :trader do
+    resources :portfolios
+    resources :transactions
+  end
 end
