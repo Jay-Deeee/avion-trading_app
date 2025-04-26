@@ -10,16 +10,26 @@ class Trader::PortfoliosController < ApplicationController
       @stock_price = response.dig("Time Series (Daily)").values.first.dig("1. open")
     end
   
-    # def show; end
+    def show
+      response = AvaApi.fetch_records(params[:symbol])
+      @symbol = response["Meta Data"]["2. Symbol"]
+      @stock_price = response.dig("Time Series (Daily)").values.first.dig("1. open")
+    end
+  
     # def new; end
-    # def create; end
+  
+    def create
+      @symbol = current_user.portfolios.new(portfolio_params)
+    end
+  
     # def edit; end
+  
     # def update; end
     
-    def destroy
-      @portfolio.destroy
-      redirect_to root_path, status: :see_other, notice: "Entry has been deleted."
-    end
+    # def destroy
+    #   @portfolio.destroy
+    #   redirect_to root_path, status: :see_other, notice: "Entry has been deleted."
+    # end
   
     private
   
@@ -28,7 +38,7 @@ class Trader::PortfoliosController < ApplicationController
     end
   
     def portfolio_params
-      params.require(:portfolio).permit(:name)
+      params.require(:portfolio).permit(:stocks)
     end
   
     # def record_not_found
@@ -39,3 +49,4 @@ class Trader::PortfoliosController < ApplicationController
     #   redirect_to categories_path, alert: "Unable to delete category. Still referenced from tasks."
     # end
   end
+  
