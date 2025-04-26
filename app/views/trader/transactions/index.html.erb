@@ -5,23 +5,34 @@
 
 <h3>Transaction History</h3>
 <div>
-  <% if @transactions.any? %>
-    <ul>
-      <% @transactions.each do |txn| %>
-        <li><%= txn.symbol %>/USDT</li>
-        <li><%= txn.shares %></li>
-        <li>USD <%= txn.price %></li>
-        <li>USD <%= txn.total %></li>
-        <li><%= txn.created_at.strftime("%b %d, %Y at %-I:%M %p") %></li>
-        <li>
-          <% if txn.action_type == "buy" %>
-            <span style="color: green; font-weight: 900;"><%= txn.action_type.upcase %></span>
-          <% else %>
-            <span style="color: red; font-weight: 900;"><%= txn.action_type.upcase %></span>
-          <% end %>
-        </li>
-      <% end %>
+  <div class="container">
+    <ul class="row list-group-horizontal">
+      <li class="col list-group-item fw-bold">NAME</li>
+      <li class="col list-group-item fw-bold">SYMBOL</li>
+      <li class="col list-group-item fw-bold">SHARES</li>
+      <li class="col list-group-item fw-bold">PRICE</li>
+      <li class="col list-group-item fw-bold">TOTAL</li>
+      <li class="col list-group-item fw-bold">DATE</li>
+      <li class="col list-group-item fw-bold">TYPE</li>
     </ul>
+  </div>
+  <% if @transactions.any? %>
+    <% @transactions.each do |txn| %>
+      <div class="container">
+        <ul class="row list-group-horizontal">
+          <li class="col list-group-item"><%= @symbol_name[txn.symbol] %></li>
+          <li class="col list-group-item"><%= txn.symbol %></li>
+          <li class="col list-group-item"><%= txn.shares %></li>
+          <li class="col list-group-item">USD <%= txn.price %></li>
+          <li class="col list-group-item">USD <%= txn.total %></li>
+          <li class="col list-group-item"><%= txn.created_at.strftime("%b %d, %Y at %-I:%M %p") %></li>
+          <li class="col list-group-item">
+            <% color = txn.action_type == "buy" ? "green" : "red" %>
+            <span style="color: <%= color %>; font-weight: 900;"><%= txn.action_type.upcase %></span>
+          </li>
+        </ul>
+      </div>
+    <% end %>
   <% else %>
     <p><em>No transactions.</em></p>
   <% end %>

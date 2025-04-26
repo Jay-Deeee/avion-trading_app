@@ -6,6 +6,7 @@ class Trader::TransactionsController < ApplicationController
     @transaction = current_user.transactions.new
     @transactions = current_user.transactions.order(created_at: :desc)
     @symbols = AvaApi.symbols
+    @symbol_name = AvaApi.symbols.to_h.invert
   end
 
   # def show; end
