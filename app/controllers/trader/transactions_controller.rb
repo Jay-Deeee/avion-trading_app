@@ -1,25 +1,59 @@
-class Admin::TransactionsController < ApplicationController
-  # before_action :set_transaction, only: [:show, :edit, :update, :destroy]
+class Trader::TransactionsController < ApplicationController
   # rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   # rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
   
-  # def index; end
+  def index
+    @transaction = current_user.transactions.new
+    @transactions = current_user.transactions.order(created_at: :desc)
+    @symbols = AvaApi.symbols
+    @symbol_name = AvaApi.symbols.to_h.invert
+  end
+
   # def show; end
-  # def new; end
-  # def create; end
+
+  def new
+    @transaction = current_user.transactions.new
+    @symbols = AvaApi.symbols
+  end
+  
+  def create
+    price = AvaApi.price_for(transaction_params[:symbol])
+    shares = transaction_params[:shares].to_d
+    total = price * shares
+
+    @transaction = current_user.transactions.build(transaction_params)
+    @transaction.price = price
+    @transaction.total = total
+
+    if price.nil?
+      flash[:alert] = "Unable to fetch the price for the selected stock. Please try again."
+      @symbols = AvaApi.symbols
+      render :new and return
+    end
+
+    if @transaction.save
+      redirect_to trader_transactions_path, notice: "Transaction successful!"
+    else
+      flash[:alert] = "Transaction Failed."
+      @symbols = AvaApi.symbols
+      render :new, status: :unprocessable_entity
+    end
+  end
+
   # def edit; end
   # def update; end
 
   def destroy
+    @transaction = Transaction.find(params[:id])
     @transaction.destroy
 
-    redirect_to @portfolio, status: :see_other, notice: "Transaction has been deleted."
+    redirect_to trader_transactions_path, status: :see_other, notice: "Transaction has been deleted."
   end
   
   private
 
-  def set_transaction
-    @transaction = Transaction.find(params[:id])
+  def transaction_params
+    params.require(:transaction).permit(:symbol, :shares, :action_type)
   end
 
   # def record_not_found
