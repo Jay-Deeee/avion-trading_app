@@ -5,28 +5,51 @@ class Trader::PortfoliosController < ApplicationController
   # rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
 
   def index
-    # if params[:symbol]
-      file_path = Rails.root.join("lib", "assets", "data.json")
-      response = JSON.parse(File.read(file_path))
-      @symbol = response["Global Quote"]["01. symbol"]
-      @stock_price = response["Global Quote"]["02. open"]
-      # response = AvaApi.fetch_records(params[:symbol])
-      # @symbol = response["Meta Data"]["2. Symbol"]
-      # @stock_price = response.dig("Time Series (Daily)").values.first.dig("1. open")
-    # end
+    @portfolios = current_user.portfolios.order(current_shares: :desc)
+    @portfolios_active = @portfolios.where("current_shares > 0")
+    @symbol = AvaApi.symbols
+    @symbol_name = @symbol.to_h.invert
+
+    @portfolios_active_info = @portfolios_active.map do |portfolio|
+      price = AvaApi.price_for(portfolio.stocks)
+      shares = portfolio.current_shares      
+      {
+        id: portfolio.id,
+        name: @symbol_name[portfolio.stocks],
+        symbol: portfolio.stocks,
+        price: price,
+        shares: shares,
+        value: price * shares
+      }
+    end
+
+    @total_value = @portfolios_active_info.sum { |info| info[:value] }
   end
 
-  def show; end
+  def show
+    @portfolio = current_user.portfolios.find(params[:id])
+    @symbol = AvaApi.symbols
+    @symbol_name = @symbol.to_h.invert
+    @transactions = current_user.transactions
+    @transactions_portfolio = @transactions.where(symbol: @portfolio.stocks)
+    @price = AvaApi.price_for(@portfolio.stocks)
+    @value = @portfolio.current_shares * @price 
+  end
 
   # def new; end
 
-  def create
-    @symbol = current_user.portfolios.new(portfolio_params)
-  end
+  # def create
+    # @portfolio = current_user.portfolios.new(portfolio_params_stocks)
+    # if @symbol.save
+    #   redirect_to @symbol, notice: "#{@symbol} was added to your Portfolio."
+    # else
+    #   flash[:alert] = "Try Again"
+    #   render :show, status: :unprocessable_entity
+  # end
 
   # def edit; end
 
-  # def update; end
+  def update; end
   
   # def destroy
   #   @portfolio.destroy
@@ -37,10 +60,6 @@ class Trader::PortfoliosController < ApplicationController
 
   def set_portfolio
     @portfolio = current_user.portfolios.find(params[:id])
-  end
-
-  def portfolio_params
-    params.require(:portfolio).permit(:stocks)
   end
 
   # def record_not_found

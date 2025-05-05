@@ -1,7 +1,27 @@
-<h3>STOCK TRADING PAGE</h3>
-<br>
-<p>Symbol: <%= @symbol %> </p>
-<br>
-<p>Price: <%= @stock_price %> </p>
-<br>
-<p>Amount: <%= @stock_amount %> </p>
+<h3>Portfolios</h3>
+<div>Overall Value: <%= number_with_delimiter(@total_value, delimiter: ",", precision: 2) %></div>
+</br>
+<div>
+  <div class="container">
+    <ul class="row list-group-horizontal">
+      <li class="col list-group-item fw-bold">SYMBOL / NAME</li>
+      <li class="col list-group-item fw-bold">TOTAL SHARES</li>
+      <li class="col list-group-item fw-bold">CURRENT PRICE</li>
+      <li class="col list-group-item fw-bold">VALUE</li>
+    </ul>
+  </div>
+
+    <% @portfolios_active_info.each do |info| %>
+      <div class="container">
+        <ul class="row list-group-horizontal">
+          <li class="col list-group-item">
+            <%= link_to info[:symbol], trader_portfolio_path(info[:id]) %></br>
+            <small><%= info[:name] %></small>
+          </li>
+          <li class="col list-group-item"><%= info[:shares] %></li>
+          <li class="col list-group-item">USD <%= number_with_delimiter(info[:price], delimiter: ",", precision: 2) %></li>
+          <li class="col list-group-item">USD <%= number_with_delimiter(info[:value], delimiter: ",", precision: 2) %></li>
+        </ul>
+      </div>
+    <% end %>
+</div>
