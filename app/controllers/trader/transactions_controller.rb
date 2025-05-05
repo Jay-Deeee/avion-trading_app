@@ -11,7 +11,7 @@ class Trader::TransactionsController < ApplicationController
 
   def new
     @transaction = current_user.transactions.new
-    @symbols = AvaApi.symbols
+    load_index_data
   end
 
   def create
@@ -25,7 +25,7 @@ class Trader::TransactionsController < ApplicationController
   
     if price.nil?
       flash[:alert] = "Unable to fetch the price for the selected stock. Please try again."
-      @symbols = AvaApi.symbols
+      load_index_data
       render :index and return
     end
   
