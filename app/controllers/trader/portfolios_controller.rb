@@ -14,6 +14,9 @@ class Trader::PortfoliosController < ApplicationController
     @portfolios_active_info = @portfolios_active.map do |portfolio|
       price = AvaApi.price_for(portfolio.stocks)
       shares = portfolio.current_shares      
+
+      next if price.nil? || shares.nil?
+
       {
         id: portfolio.id,
         name: @symbol_name[portfolio.stocks],
@@ -22,7 +25,7 @@ class Trader::PortfoliosController < ApplicationController
         shares: shares,
         value: price * shares
       }
-    end
+    end.compact
 
     @total_value = @portfolios_active_info.sum { |info| info[:value] }
   end

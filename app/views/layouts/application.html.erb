@@ -19,6 +19,14 @@
   </head>
 
   <body>
+    <% if user_signed_in? %>
+      <% if current_user&.is_admin? %>
+        <%= render "admin/header" %>
+      <% else %>
+        <%= render "trader/header" %>
+      <% end %>
+    <% end %>
+
     <% flash.each do |type, msg| %>
       <div style="text-align: center" class="alert alert-info alert-dismissible fade show" role="alert">
         <%= msg %>
