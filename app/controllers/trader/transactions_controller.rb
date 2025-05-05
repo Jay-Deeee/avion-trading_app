@@ -62,6 +62,17 @@ class Trader::TransactionsController < ApplicationController
     render :index, status: :unprocessable_entity
   end
 
+  def get_stock_price
+    symbol = params[:symbol]
+    price = AvaApi.price_for(symbol)
+
+    if price
+      render json: { price: price }
+    else
+      render json: { price: 'N/A' }, status: :unprocessable_entity
+    end
+  end
+
   # def edit; end
   # def update; end
 
