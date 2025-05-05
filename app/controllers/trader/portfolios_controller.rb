@@ -9,6 +9,7 @@ class Trader::PortfoliosController < ApplicationController
     @portfolios_active = @portfolios.where("current_shares > 0")
     @symbol = AvaApi.symbols
     @symbol_name = @symbol.to_h.invert
+    @balance = current_user.balance
 
     @portfolios_active_info = @portfolios_active.map do |portfolio|
       price = AvaApi.price_for(portfolio.stocks)
