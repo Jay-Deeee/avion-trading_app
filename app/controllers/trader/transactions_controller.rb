@@ -58,7 +58,7 @@ class Trader::TransactionsController < ApplicationController
 
   rescue ActiveRecord::RecordInvalid
     flash[:alert] = "Transaction Failed."
-    @symbols = AvaApi.symbols
+    load_index_data
     render :index, status: :unprocessable_entity
   end
 
