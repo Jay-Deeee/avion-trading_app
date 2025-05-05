@@ -32,6 +32,7 @@ class Trader::TransactionsController < ApplicationController
     end
 
     if @transaction.save
+      create_update_portfolio(@transaction.symbol, shares)
       redirect_to trader_transactions_path, notice: "Transaction successful!"
     else
       flash[:alert] = "Transaction Failed."
@@ -54,6 +55,22 @@ class Trader::TransactionsController < ApplicationController
 
   def transaction_params
     params.require(:transaction).permit(:symbol, :shares, :action_type)
+  end
+
+  def create_update_portfolio(symbol, shares)
+    portfolio = current_user.portfolios.find_or_initialize_by(stocks: symbol)
+    portfolio.current_shares ||= 0
+
+    if @transaction.action_type == "buy"
+      portfolio.current_shares += shares
+    elsif @transaction.action_type == "sell"
+      if portfolio.current_shares >= shares
+        portfolio.current_shares -= shares
+      else
+        flash[:alert] = "Insuficient shares to sell."
+      end
+    end
+    portfolio.save
   end
 
   # def record_not_found
