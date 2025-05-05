@@ -4,9 +4,7 @@ class Trader::TransactionsController < ApplicationController
   
   def index
     @transaction = current_user.transactions.new
-    @transactions = current_user.transactions.order(created_at: :desc)
-    @symbols = AvaApi.symbols
-    @symbol_name = AvaApi.symbols.to_h.invert
+    load_index_data
   end
 
   # def show; end
@@ -15,30 +13,53 @@ class Trader::TransactionsController < ApplicationController
     @transaction = current_user.transactions.new
     @symbols = AvaApi.symbols
   end
-  
+
   def create
     price = AvaApi.price_for(transaction_params[:symbol])
     shares = transaction_params[:shares].to_d
     total = price * shares
-
+  
     @transaction = current_user.transactions.build(transaction_params)
     @transaction.price = price
     @transaction.total = total
-
+  
     if price.nil?
       flash[:alert] = "Unable to fetch the price for the selected stock. Please try again."
       @symbols = AvaApi.symbols
-      render :new and return
+      render :index and return
     end
-
-    if @transaction.save
+  
+    if @transaction.action_type == "buy"
+      if current_user.balance < total
+        flash[:alert] = "Insufficient funds to complete the purchase."
+        load_index_data
+        render :index, status: :unprocessable_entity and return
+      else
+        current_user.balance -= total
+      end
+    elsif @transaction.action_type == "sell"
+      portfolio = current_user.portfolios.find_by(stocks: @transaction.symbol)
+      if portfolio.nil? || portfolio.current_shares < shares
+        flash[:alert] = "You don't have enough shares to sell."
+        load_index_data
+        render :index, status: :unprocessable_entity and return
+      else
+        current_user.balance += total
+      end
+    end
+  
+    ActiveRecord::Base.transaction do
+      @transaction.save!
+      current_user.save!
       create_update_portfolio(@transaction.symbol, shares)
-      redirect_to trader_transactions_path, notice: "Transaction successful!"
-    else
-      flash[:alert] = "Transaction Failed."
-      @symbols = AvaApi.symbols
-      render :new, status: :unprocessable_entity
     end
+  
+    redirect_to trader_transactions_path, notice: "Transaction successful!"
+
+  rescue ActiveRecord::RecordInvalid
+    flash[:alert] = "Transaction Failed."
+    @symbols = AvaApi.symbols
+    render :index, status: :unprocessable_entity
   end
 
   # def edit; end
@@ -71,6 +92,12 @@ class Trader::TransactionsController < ApplicationController
       end
     end
     portfolio.save
+  end
+
+  def load_index_data
+    @transactions = current_user.transactions.order(created_at: :desc)
+    @symbols = AvaApi.symbols
+    @symbol_name = AvaApi.symbols.to_h.invert
   end
 
   # def record_not_found
