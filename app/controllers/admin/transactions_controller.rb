@@ -3,8 +3,16 @@ class Admin::TransactionsController < ApplicationController
   # rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   # rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
   
-  # def index; end
-  # def show; end
+  def index
+    @users = User.all
+    @transactions = Transaction.includes(:user).order(created_at: :desc)
+    load_api_symbols
+  end
+
+  def show
+    @transaction = Transaction.find(params[:id])
+    load_api_symbols
+  end
   # def new; end
   # def create; end
   # def edit; end
@@ -18,9 +26,14 @@ class Admin::TransactionsController < ApplicationController
   
   private
 
-  def set_transaction
-    @transaction = Transaction.find(params[:id])
+  def load_api_symbols
+    @symbols = AvaApi.symbols
+    @symbol_name = AvaApi.symbols.to_h.invert
   end
+
+  # def set_transaction
+  #   @transaction = Transaction.find(params[:id])
+  # end
 
   # def record_not_found
   #   redirect_to categories_path, alert: "Record does not exist."

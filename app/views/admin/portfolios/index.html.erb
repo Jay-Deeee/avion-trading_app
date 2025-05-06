@@ -1,5 +1,30 @@
-<h3>STOCK TRADING PAGE</h3>
-<br>
-<p>Symbol: <%= @symbol %> </p>
-<br>
-<p>Price: <%= @stock_price %> </p>
+<h3>All Users</h3>
+<div>
+  <div class="container">
+    <ul class="row list-group-horizontal">
+      <li class="col list-group-item fw-bold">NAME</li>
+      <li class="col list-group-item fw-bold">E-MAIL</li>
+      <li class="col list-group-item fw-bold">MEMBER SINCE</li>
+      <li class="col list-group-item fw-bold">ADMIN STATUS</li>
+      <li class="col list-group-item fw-bold"></li>
+    </ul>
+  </div>
+  <% if @users.any? %>
+    <% @users.each do |user| %>
+      <div class="container">
+        <ul class="row list-group-horizontal">
+          <li class="col list-group-item"><%= link_to "#{user.full_name}", admin_portfolio_path(user) %></li>
+          <li class="col list-group-item"><%= user.email %></li>
+          <li class="col list-group-item"><%= user.created_at.strftime("%b %d, %Y at %-I:%M %p") %></li>
+          <li class="col list-group-item">
+            <% color = user.is_admin == true ? "green" : "red" %>
+            <span style="color: <%= color %>; font-weight: 900;"><%= "#{user.is_admin}".upcase %></span>
+          </li>
+          <li class="col list-group-item"></li>
+        </ul>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="container"><em>No users.</em></p>
+  <% end %>
+</div>

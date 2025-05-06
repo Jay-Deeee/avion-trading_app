@@ -1,0 +1,10 @@
+<section>
+  <h4>Transaction ID: <%= @transaction.id %></h4>
+  <p>Owner: <%= @transaction.user.full_name %></p>
+  <p>Stock: <%= @symbol_name[@transaction.symbol] %></p>
+  <p>Stock: <%= @transaction.symbol %></p>
+  <p>Shares: <%= @transaction.shares %></p>
+  <p>Price: <%= @transaction.price %></p>
+  <p>Total price: <%= @transaction.total %></p>
+  <p>Time: <%= @transaction.created_at.strftime("%b %d, %Y at %-I:%M %p") %></p>
+</section>

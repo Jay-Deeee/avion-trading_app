@@ -5,18 +5,13 @@ class Admin::PortfoliosController < ApplicationController
   # rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
 
   def index
-    # if params[:symbol]
-    file_path = Rails.root.join("lib", "assets", "data.json")
-    response = JSON.parse(File.read(file_path))
-    @symbol = response["Global Quote"]["01. symbol"]
-    @stock_price = response["Global Quote"]["02. open"]
-    # response = AvaApi.fetch_records(params[:symbol])
-    # @symbol = response["Meta Data"]["2. Symbol"]
-    # @stock_price = response.dig("Time Series (Daily)").values.first.dig("1. open")
-  # end
+    @users = User.order(first_name: :asc)
   end
 
-  # def show; end
+  def show
+    @user = User.find(params[:id])
+  end
+
   # def new; end
   # def create; end
   # def edit; end
