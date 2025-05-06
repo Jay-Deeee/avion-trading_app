@@ -16,7 +16,7 @@
     <% @transactions.each do |txn| %>
       <div class="container">
         <ul class="row list-group-horizontal">
-          <li class="col list-group-item"><%= txn.user.full_name %></li>
+          <li class="col list-group-item"><%= link_to "#{txn.user.full_name}", admin_transaction_path(txn) %></li>
           <li class="col list-group-item"><%= @symbol_name[txn.symbol] %></li>
           <li class="col list-group-item"><%= txn.symbol %></li>
           <li class="col list-group-item"><%= txn.shares %></li>

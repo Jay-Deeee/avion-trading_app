@@ -8,7 +8,10 @@ class Admin::PortfoliosController < ApplicationController
     @users = User.order(first_name: :asc)
   end
 
-  # def show; end
+  def show
+    @user = User.find(params[:id])
+  end
+
   # def new; end
   # def create; end
   # def edit; end

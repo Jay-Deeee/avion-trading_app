@@ -13,7 +13,7 @@
     <% @users.each do |user| %>
       <div class="container">
         <ul class="row list-group-horizontal">
-          <li class="col list-group-item"><%= user.full_name %></li>
+          <li class="col list-group-item"><%= link_to "#{user.full_name}", admin_portfolio_path(user) %></li>
           <li class="col list-group-item"><%= user.email %></li>
           <li class="col list-group-item"><%= user.created_at.strftime("%b %d, %Y at %-I:%M %p") %></li>
           <li class="col list-group-item">

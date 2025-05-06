@@ -6,11 +6,13 @@ class Admin::TransactionsController < ApplicationController
   def index
     @users = User.all
     @transactions = Transaction.includes(:user).order(created_at: :desc)
-    @symbols = AvaApi.symbols
-    @symbol_name = AvaApi.symbols.to_h.invert
+    load_api_symbols
   end
 
-  # def show; end
+  def show
+    @transaction = Transaction.find(params[:id])
+    load_api_symbols
+  end
   # def new; end
   # def create; end
   # def edit; end
@@ -24,9 +26,14 @@ class Admin::TransactionsController < ApplicationController
   
   private
 
-  def set_transaction
-    @transaction = Transaction.find(params[:id])
+  def load_api_symbols
+    @symbols = AvaApi.symbols
+    @symbol_name = AvaApi.symbols.to_h.invert
   end
+
+  # def set_transaction
+  #   @transaction = Transaction.find(params[:id])
+  # end
 
   # def record_not_found
   #   redirect_to categories_path, alert: "Record does not exist."
