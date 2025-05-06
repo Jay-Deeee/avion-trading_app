@@ -3,7 +3,13 @@ class Admin::TransactionsController < ApplicationController
   # rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   # rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
   
-  # def index; end
+  def index
+    @users = User.all
+    @transactions = Transaction.includes(:user).order(created_at: :desc)
+    @symbols = AvaApi.symbols
+    @symbol_name = AvaApi.symbols.to_h.invert
+  end
+
   # def show; end
   # def new; end
   # def create; end

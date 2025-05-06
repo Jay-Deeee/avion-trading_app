@@ -11,4 +11,8 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :balance, numericality: { greater_than_or_equal_to: 0 }
   validates :email, presence: true
+
+  def full_name
+    "#{first_name.capitalize} #{last_name.capitalize}"
+  end
 end

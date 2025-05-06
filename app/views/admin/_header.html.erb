@@ -5,8 +5,8 @@
       <p><em>Hello, <%= "#{current_user.first_name}!" %></em></p>
     </div>
     <ul>
-      <li><%= link_to "Users", trader_transactions_path %></li>
-      <li><%= link_to "Transactions", trader_transactions_path %></li>
+      <li><%= link_to "Users", admin_portfolios_path %></li>
+      <li><%= link_to "Transactions", admin_transactions_path %></li>
       <button class="btn btn-danger"><%= link_to "Signout", destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: "Signout?"} %></button>
     </ul>
   </nav>
