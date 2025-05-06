@@ -1,16 +1,20 @@
 <h3>Portfolios</h3>
 <div>Balance: <%= number_with_delimiter(@balance, delimiter: ",", precision: 2) %></div>
+<div>
+  <%= render partial: 'trader/portfolios/form' %>
+</div>
 <div>Overall Value: <%= number_with_delimiter(@total_value, delimiter: ",", precision: 2) %></div>
 </br>
 <div>
-  <div class="container">
-    <ul class="row list-group-horizontal">
-      <li class="col list-group-item fw-bold">SYMBOL / NAME</li>
-      <li class="col list-group-item fw-bold">TOTAL SHARES</li>
-      <li class="col list-group-item fw-bold">CURRENT PRICE</li>
-      <li class="col list-group-item fw-bold">VALUE</li>
-    </ul>
-  </div>
+  <% if @portfolios_active.any? %>
+    <div class="container">
+      <ul class="row list-group-horizontal">
+        <li class="col list-group-item fw-bold">SYMBOL / NAME</li>
+        <li class="col list-group-item fw-bold">TOTAL SHARES</li>
+        <li class="col list-group-item fw-bold">CURRENT PRICE</li>
+        <li class="col list-group-item fw-bold">VALUE</li>
+      </ul>
+    </div>
 
     <% @portfolios_active_info.each do |info| %>
       <div class="container">
@@ -25,4 +29,38 @@
         </ul>
       </div>
     <% end %>
+  <% else %>
+    <p class="container">
+      <em>
+        Buy new stocks to add to your portfolio —
+        <%= link_to "Go to Transactions", trader_transactions_path %>.
+      </em>
+    </p>
+  <% end %>
+</div>
+
+<h3>Top Companies</h3>
+<div>
+  <% if @top_companies.any? %>
+    <div class="container">
+      <ul class="row list-group-horizontal">
+        <li class="col list-group-item fw-bold">SYMBOL / NAME</li>
+        <li class="col list-group-item fw-bold">CURRENT PRICE</li>
+      </ul>
+    </div>
+
+    <% @top_companies.each do |company| %>
+      <div class="container">
+        <ul class="row list-group-horizontal">
+          <li class="col list-group-item">
+            <%= link_to company[:symbol], trader_transactions_path %></br>
+            <small><%= company[:name] %></small>
+          </li>
+          <li class="col list-group-item">USD <%= number_with_delimiter(company[:price], delimiter: ",", precision: 2) %></li>
+        </ul>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="container"><em>Top Companies list is empty.</em></p>
+  <% end %>
 </div>

@@ -12,22 +12,31 @@ class Trader::PortfoliosController < ApplicationController
     @balance = current_user.balance
 
     @portfolios_active_info = @portfolios_active.map do |portfolio|
-      price = AvaApi.price_for(portfolio.stocks)
-      shares = portfolio.current_shares      
-
-      next if price.nil? || shares.nil?
-
+      price_avaapi = AvaApi.price_for(portfolio.stocks)
+      shares = portfolio.current_shares
+      price = price_avaapi == nil ? "N/A" : price_avaapi
+      value = price_avaapi == nil ? "N/A" : (price * shares)
       {
         id: portfolio.id,
         name: @symbol_name[portfolio.stocks],
         symbol: portfolio.stocks,
         price: price,
         shares: shares,
-        value: price * shares
+        value: value
       }
     end.compact
 
-    @total_value = @portfolios_active_info.sum { |info| info[:value] }
+    @total_value = @portfolios_active_info.sum { |info| info[:value].is_a?(Numeric) ? info[:value] : 0 }
+
+    @top_companies = AvaApi.symbols.map do |name, symbol|
+      price_avaapi = AvaApi.price_for(symbol)
+      price = price_avaapi == nil ? "N/A" : price_avaapi
+      { 
+        name: name, 
+        symbol: symbol,
+        price: price 
+      }
+    end
   end
 
   def show
@@ -59,6 +68,16 @@ class Trader::PortfoliosController < ApplicationController
   #   @portfolio.destroy
   #   redirect_to root_path, status: :see_other, notice: "Entry has been deleted."
   # end
+
+  def add_balance
+    amount = params[:amount].to_f
+    if amount > 0
+      current_user.increment!(:balance, amount)
+      redirect_back fallback_location: root_path, notice: "Balance updated."
+    else
+      redirect_back fallback_location: root_path, alert: "Enter a valid amount."
+    end
+  end
 
   private
 
