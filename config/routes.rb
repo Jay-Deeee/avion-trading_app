@@ -9,7 +9,11 @@ Rails.application.routes.draw do
 
   namespace :trader do
     resources :portfolios
-    resources :transactions
+    resources :transactions do
+      collection do
+        get :get_stock_price
+      end
+    end
   end
 
   namespace :admin do

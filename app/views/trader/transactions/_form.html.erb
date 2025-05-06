@@ -2,6 +2,8 @@
   <%= form.label :symbol %>
   <%= form.select :symbol, symbols.collect { |name, symbol| [name, symbol] }, prompt: "Select a Stock" %>
 
+  <div id="stock_price" style="margin-top: 10px;"></div>
+
   <%= form.label :shares %>
   <%= form.number_field :shares, step: 0.01, min: 0.01 %>
 
