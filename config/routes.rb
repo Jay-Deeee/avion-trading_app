@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   namespace :trader do
+    post 'add_balance', to: 'portfolios#add_balance', as: :add_balance
     resources :portfolios
     resources :transactions do
       collection do
