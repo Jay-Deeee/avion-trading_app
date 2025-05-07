@@ -41,25 +41,19 @@
 
 <h3>Top Companies</h3>
 <div>
-  <% if @top_companies.any? %>
+  <% if @symbols.any? %>
     <div class="container">
-      <ul class="row list-group-horizontal">
-        <li class="col list-group-item fw-bold">SYMBOL / NAME</li>
-        <li class="col list-group-item fw-bold">CURRENT PRICE</li>
+      <ul class="row">
+        <% @symbols.each_slice(3) do |symbols_row| %>
+          <% symbols_row.each do |symbol| %>
+            <li class="col-4">
+              <%= link_to symbol[0], trader_transactions_path %><br>
+              <small><%= symbol[1] %></small>
+            </li>
+          <% end %>
+        <% end %>
       </ul>
     </div>
-
-    <% @top_companies.each do |company| %>
-      <div class="container">
-        <ul class="row list-group-horizontal">
-          <li class="col list-group-item">
-            <%= link_to company[:symbol], trader_transactions_path %></br>
-            <small><%= company[:name] %></small>
-          </li>
-          <li class="col list-group-item">USD <%= number_with_delimiter(company[:price], delimiter: ",", precision: 2) %></li>
-        </ul>
-      </div>
-    <% end %>
   <% else %>
     <p class="container"><em>Top Companies list is empty.</em></p>
   <% end %>
