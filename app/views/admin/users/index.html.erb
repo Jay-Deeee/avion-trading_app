@@ -1,0 +1,43 @@
+<div class="d-flex gap-5">
+  <h3>All Users</h3>
+  <%= link_to new_admin_user_path, title: "Create New User" do %>
+    <i class="fas fa-user-plus"></i> Create User
+  <% end %>
+</div>
+<br>
+<div>
+  <div class="container">
+    <ul class="row list-group-horizontal">
+      <li class="col list-group-item fw-bold">NAME</li>
+      <li class="col list-group-item fw-bold">E-MAIL</li>
+      <li class="col list-group-item fw-bold">MEMBER SINCE</li>
+      <li class="col list-group-item fw-bold">USER TYPE</li>
+      <li class="col list-group-item fw-bold">ACTIONS</li>
+    </ul>
+  </div>
+  <% if @users.any? %>
+    <% @users.each do |user| %>
+      <div class="container">
+        <ul class="row list-group-horizontal">
+          <li class="col list-group-item"><%= link_to "#{user.full_name}", admin_user_path(user) %></li>
+          <li class="col list-group-item"><%= user.email %></li>
+          <li class="col list-group-item"><%= user.created_at.strftime("%b %d, %Y at %-I:%M %p") %></li>
+          <li class="col list-group-item">
+            <% color = user.is_admin == true ? "green" : "red" %>
+            <span style="color: <%= color %>; font-weight: 900;"><%= user.is_admin? ? "ADMIN" : "TRADER" %></span>
+          </li>
+          <li class="col list-group-item d-flex gap-5">
+            <%= link_to edit_admin_user_path(user), title: "Edit User Information" do %>
+              <i class="fas fa-edit"></i>
+            <% end %>
+            <%= link_to edit_password_admin_user_path(user), title: "Change User Password" do %>
+              <i class="fas fa-key"></i>
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="container"><em>No users.</em></p>
+  <% end %>
+</div>

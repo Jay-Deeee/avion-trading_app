@@ -1,4 +1,5 @@
 class Trader::PortfoliosController < ApplicationController
+  before_action :require_trader!
   # before_action :set_portfolio
   # before_action :set_transaction, only: [:show, :edit, :update, :destroy]
   # rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
@@ -56,6 +57,12 @@ class Trader::PortfoliosController < ApplicationController
   end
 
   private
+
+  def require_trader!
+    if current_user.is_admin? && request.path != admin_root_path
+      redirect_to admin_root_path, alert: "Restricted. Trader Access Only."
+    end
+  end
 
   # def record_not_found
   #   redirect_to categories_path, alert: "Record does not exist."

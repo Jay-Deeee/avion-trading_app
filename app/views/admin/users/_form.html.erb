@@ -1,0 +1,45 @@
+<%= form_with(model: [:admin, @user], local: true) do |form| %>
+  <div>
+    <%= form.label :first_name %>
+    <%= form.text_field :first_name %>
+    <% @user.errors.full_messages_for(:first_name).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :last_name %>
+    <%= form.text_field :last_name %>
+    <% @user.errors.full_messages_for(:last_name).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :email %>
+    <%= form.email_field :email %>
+    <% @user.errors.full_messages_for(:email).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :balance %>
+    <%= form.number_field :balance, step: 0.01 %>
+    <% @user.errors.full_messages_for(:balance).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.label :is_admin, "User Type" %>
+    <%= form.select :is_admin, [["Trader", false], ["Admin", true]] %>
+    <% @user.errors.full_messages_for(:is_admin).each do |message| %>
+      <div><%= message %></div>
+    <% end %>
+  </div>
+
+  <div>
+    <%= form.submit @user.persisted? ? "Update Trader" : "Create Trader" %>
+  </div>
+<% end %>

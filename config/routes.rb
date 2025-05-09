@@ -18,7 +18,13 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :portfolios
+    root to: "users#index"
+    resources :users do
+      member do
+        get :edit_password
+        patch :update_password
+      end
+    end
     resources :transactions
   end
 end
