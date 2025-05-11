@@ -5,7 +5,9 @@ Rails.application.routes.draw do
 
   root "trader/portfolios#index"
 
-  devise_for :users
+  devise_for :users, controllers: {
+    registrations: "users/registrations"
+  }
 
   namespace :trader do
     post 'add_balance', to: 'portfolios#add_balance', as: :add_balance
@@ -23,6 +25,10 @@ Rails.application.routes.draw do
       member do
         get :edit_password
         patch :update_password
+        patch :approve
+      end
+      collection do
+        get :pending
       end
     end
     resources :transactions

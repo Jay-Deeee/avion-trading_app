@@ -58,6 +58,18 @@ class Admin::UsersController < ApplicationController
   #   redirect_to root_path, status: :see_other, notice: "Entry has been deleted."
   # end
 
+  def pending
+    @pending_users = User.where(approved: false)
+  end
+
+  def approve
+    user = User.find(params[:id])
+    user.update(approved: true)
+    user.send_confirmation_instructions unless user.confirmed?
+  
+    redirect_to admin_users_path, notice: "User approved and confirmation email sent."
+  end
+
   private
 
   def require_admin!
