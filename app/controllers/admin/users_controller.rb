@@ -36,10 +36,10 @@ class Admin::UsersController < ApplicationController
   def update
     if @user.update(user_params)
 			redirect_to admin_user_path(@user), notice: 'User has been updated'
-		else
+    else
       flash.alert = 'Failed to update credentials.'
 			render :edit, status: :unprocessable_entity
-		end
+    end
   end
 
   def edit_password; end
