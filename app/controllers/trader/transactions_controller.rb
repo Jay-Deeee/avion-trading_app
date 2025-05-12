@@ -1,6 +1,5 @@
 class Trader::TransactionsController < ApplicationController
-  # rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  # rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   
   def index
     @transaction = current_user.transactions.new
@@ -17,17 +16,18 @@ class Trader::TransactionsController < ApplicationController
   def create
     price = AvaApi.price_for(transaction_params[:symbol])
     shares = transaction_params[:shares].to_d
-    total = price * shares
-  
-    @transaction = current_user.transactions.build(transaction_params)
-    @transaction.price = price
-    @transaction.total = total
-  
+
     if price.nil?
       flash[:alert] = "Unable to fetch the price for the selected stock. Please try again."
       load_index_data
       render :index and return
     end
+
+    total = price * shares
+  
+    @transaction = current_user.transactions.build(transaction_params)
+    @transaction.price = price
+    @transaction.total = total
   
     if @transaction.action_type == "buy"
       if current_user.balance < total
@@ -111,11 +111,7 @@ class Trader::TransactionsController < ApplicationController
     @symbol_name = AvaApi.symbols.to_h.invert
   end
 
-  # def record_not_found
-  #   redirect_to categories_path, alert: "Record does not exist."
-  # end
-
-  # def invalid_foreign_key
-  #   redirect_to categories_path, alert: "Unable to delete category. Still referenced from tasks."
-  # end
+  def record_not_found
+    redirect_to trader_transactions_path, alert: "Record does not exist."
+  end
 end

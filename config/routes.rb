@@ -31,6 +31,6 @@ Rails.application.routes.draw do
         get :pending
       end
     end
-    resources :transactions
+    resources :transactions, only: [:index, :show, :destroy]
   end
 end

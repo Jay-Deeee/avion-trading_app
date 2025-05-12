@@ -58,3 +58,13 @@ group :test do
 end
 
 gem "devise", "~> 4.9", ">= 4.9.4"
+
+group :development, :test do
+  gem 'rspec-rails', '~> 8.0.0'
+end
+
+group :development, :test do
+  gem 'factory_bot_rails'
+end
+
+gem 'rails-controller-testing', '~> 1.0', '>= 1.0.5'
