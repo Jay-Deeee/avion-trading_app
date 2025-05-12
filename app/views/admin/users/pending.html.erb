@@ -1,0 +1,28 @@
+<div class="d-flex gap-5">
+  <h3>Pending User Approvals</h3>
+</div>
+<br>
+<div>
+  <div class="container">
+    <ul class="row list-group-horizontal">
+      <li class="col list-group-item fw-bold">NAME</li>
+      <li class="col list-group-item fw-bold">E-MAIL</li>
+      <li class="col list-group-item fw-bold"></li>
+    </ul>
+  </div>
+  <% if @pending_users.any? %>
+    <% @pending_users.each do |user| %>
+      <div class="container">
+        <ul class="row list-group-horizontal">
+          <li class="col list-group-item"><%= user.full_name %></li>
+          <li class="col list-group-item"><%= user.email %></li>
+          <li class="col list-group-item">
+            <%= button_to "Approve", approve_admin_user_path(user), method: :patch, data: { confirm: "Are you sure?" } %>
+          </li>
+        </ul>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="container"><em>No users pending approval.</em></p>
+  <% end %>
+</div>
