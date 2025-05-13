@@ -17,9 +17,9 @@
     </ul>
   </div>
 
-  <% if @transactions_portfolio.any? %>
+  <% if @transactions.any? %>
     <% total_shares = @portfolio.current_shares %>
-    <% @transactions_portfolio.reverse.each do |txn| %>
+    <% @transactions.reverse.each do |txn| %>
       <% value = txn.shares * txn.price %>
 
       <div class="container">
