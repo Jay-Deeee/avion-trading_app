@@ -7,5 +7,10 @@ FactoryBot.define do
     balance    { 5000.00 }
     approved   { true }
     confirmed_at { Time.current }
+
+    factory :user_admin do
+      first_name { "John_admin" }
+      email      { "johnadmindoe@gmail.com" }
+    end
   end
 end
