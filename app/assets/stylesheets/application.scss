@@ -10,48 +10,31 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- *= require_tree .
- *= require_self
  */
 
-.header nav {
+@import "header";
+@import "devise/new";
+@import "admin/users/index";
+
+body {
   display: flex;
-  justify-content: space-between;
-  background-color: #4e8cb6;
-  color: #ffffff;
-  padding: 15px 20px;
+  flex-direction: column;
 }
 
-.header nav p {
-  margin: 0px;
-  padding: 0px;
-  align-content: center;
-}
-
-.header nav ul {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  margin: 0px;
-  padding: 0px;
-  list-style: none;
-}
-
-.header nav a {
+a {
+  color: #000000;
   text-decoration: none;
-  color: #ffffff;
+
+  &:hover {
+    font-weight: 900;
+    text-decoration: underline;
+  }
 }
 
-.header nav a:hover {
-  text-decoration: underline;
-  font-weight: 900;
-}
-
-.header-home-div {
-  display: flex;
-  gap: 30px;
-}
-
-.header-balance {
-  font-weight: 900;
+.app-flash {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
 }
