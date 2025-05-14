@@ -15,13 +15,15 @@
     <% end %>
   </div>
 
-  <div>
-    <%= form.label :email %>
-    <%= form.email_field :email %>
-    <% @user.errors.full_messages_for(:email).each do |message| %>
-      <div><%= message %></div>
-    <% end %>
-  </div>
+  <% if user.new_record? %>
+    <div>
+      <%= form.label :email %>
+      <%= form.email_field :email %>
+      <% @user.errors.full_messages_for(:email).each do |message| %>
+        <div><%= message %></div>
+      <% end %>
+    </div>
+  <% end %>
 
   <div>
     <%= form.label :balance %>

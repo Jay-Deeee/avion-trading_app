@@ -1,10 +1,7 @@
 class Admin::UsersController < ApplicationController
   before_action :require_admin!
   before_action :set_user_id, only: %i[edit update edit_password update_password]
-  # before_action :set_portfolio
-  # before_action :set_transaction, only: [:show, :edit, :update, :destroy]
-  # rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-  # rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def index
     @users = User.order(first_name: :asc)
@@ -20,8 +17,8 @@ class Admin::UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @user.password = "password"
-    @user.password_confirmation = "password"
+    set_given_password
+    bypass_approval_and_confirmation
 
     if @user.save
       redirect_to admin_user_path(@user),notice: "New trader created."
@@ -52,11 +49,6 @@ class Admin::UsersController < ApplicationController
       render :edit_password, status: :unprocessable_entity
     end
   end
-  
-  # def destroy
-  #   @portfolio.destroy
-  #   redirect_to root_path, status: :see_other, notice: "Entry has been deleted."
-  # end
 
   def pending
     @pending_users = User.where(approved: false)
@@ -84,15 +76,21 @@ class Admin::UsersController < ApplicationController
     params.require(:user).permit(:first_name, :last_name, :email, :balance)
   end
 
+  def set_given_password
+    @user.password = "password"
+    @user.password_confirmation = "password"
+  end
+
+  def bypass_approval_and_confirmation
+    @user.approved = true
+    @user.confirmed_at = Time.current
+  end
+
   def password_params
     params.require(:user).permit(:password, :password_confirmation)
   end
 
-  # def record_not_found
-  #   redirect_to categories_path, alert: "Record does not exist."
-  # end
-
-  # def invalid_foreign_key
-  #   redirect_to categories_path, alert: "Unable to delete category. Still referenced from tasks."
-  # end
+  def record_not_found
+    redirect_to admin_root_path, alert: "Record does not exist."
+  end
 end
