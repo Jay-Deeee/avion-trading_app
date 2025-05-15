@@ -1,53 +1,55 @@
-<h2><%= @portfolio.stocks %></h2>
-<h6><%= @symbol_name[@portfolio.stocks] %></h6>
-</br>
-<div> Current Shares: <%= @portfolio.current_shares %></div>
-<div> Current Price: <%= @price %></div>
-<div> Current Value: <%= @value %></div>
-</br>
-<h3>Transaction History</h3>
-<div>
-  <div class="container">
-    <ul class="row list-group-horizontal">
-      <li class="col list-group-item fw-bold">DATE</li>
-      <li class="col list-group-item fw-bold">TOTAL SHARES</li>
-      <li class="col list-group-item fw-bold">SHARES</li>
-      <li class="col list-group-item fw-bold">PRICE</li>
-      <li class="col list-group-item fw-bold">VALUE</li>
-    </ul>
-  </div>
+<section class="table-container">
+  <h2><%= @symbol_name[@portfolio.stocks].upcase %></h2>
+  <h6><%= @portfolio.stocks %></h6>
+  <br />
+  <div> Current Shares: <%= @portfolio.current_shares %></div>
+  <div> Current Price: <%= @price %></div>
+  <div> Current Value: <%= @value %></div>
+  <br />
+  <h3>Transaction History</h3>
+  <div>
+    <div class="container">
+      <ul class="row list-group-horizontal">
+        <li class="col list-group-item fw-bold">DATE</li>
+        <li class="col list-group-item fw-bold">TOTAL SHARES</li>
+        <li class="col list-group-item fw-bold">SHARES</li>
+        <li class="col list-group-item fw-bold">PRICE</li>
+        <li class="col list-group-item fw-bold">VALUE</li>
+      </ul>
+    </div>
 
-  <% if @transactions.any? %>
-    <% total_shares = @portfolio.current_shares %>
-    <% @transactions.reverse.each do |txn| %>
-      <% value = txn.shares * txn.price %>
+    <% if @transactions.any? %>
+      <% total_shares = @portfolio.current_shares %>
+      <% @transactions.reverse.each do |txn| %>
+        <% value = txn.shares * txn.price %>
 
-      <div class="container">
-        <ul class="row list-group-horizontal">
-          <li class="col list-group-item"><%= txn.created_at.strftime("%b %d, %Y at %-I:%M %p") %></li>
-          <li class="col list-group-item"><%= total_shares %></li>
-          <li class="col list-group-item <%= txn.action_type == "buy" ? "text-success" : "text-danger"%>">
-            <%= txn.action_type == 'buy' ? "+#{txn.shares}" : "-#{txn.shares}" %>
-          </li>
-          <li class="col list-group-item <%= txn.action_type == "buy" ? "text-success" : "text-danger"%>">
-            USD <%= number_with_delimiter(txn.price, delimiter: ',', precision: 2) %>
-          </li>
-          <li class="col list-group-item <%= txn.action_type == "buy" ? "text-success" : "text-danger"%>">
-            USD <%= txn.action_type == 'buy' ? "+#{number_with_delimiter(value, delimiter: ',', precision: 2)}" : "-#{number_with_delimiter(value, delimiter: ',', precision: 2)}" %>
-          </li>
-        </ul>
-      </div>
+        <div class="container">
+          <ul class="row list-group-horizontal">
+            <li class="col list-group-item"><%= txn.created_at.strftime("%b %d, %Y at %-I:%M %p") %></li>
+            <li class="col list-group-item"><%= total_shares %></li>
+            <li class="col list-group-item <%= txn.action_type == "buy" ? "text-success" : "text-danger"%>">
+              <%= txn.action_type == 'buy' ? "+#{txn.shares}" : "-#{txn.shares}" %>
+            </li>
+            <li class="col list-group-item <%= txn.action_type == "buy" ? "text-success" : "text-danger"%>">
+              USD <%= number_with_delimiter(txn.price, delimiter: ',', precision: 2) %>
+            </li>
+            <li class="col list-group-item <%= txn.action_type == "buy" ? "text-success" : "text-danger"%>">
+              USD <%= txn.action_type == 'buy' ? "+#{number_with_delimiter(value, delimiter: ',', precision: 2)}" : "-#{number_with_delimiter(value, delimiter: ',', precision: 2)}" %>
+            </li>
+          </ul>
+        </div>
 
-      <% total_shares -= (txn.action_type == 'buy' ? txn.shares : -txn.shares) %>
+        <% total_shares -= (txn.action_type == 'buy' ? txn.shares : -txn.shares) %>
+      <% end %>
+    <% else %>
+      <p class="container"><em>No transactions yet.</em></p>
     <% end %>
-  <% else %>
-    <p class="container"><em>No transactions yet.</em></p>
-  <% end %>
 
-  <% if total_shares.round(2) != 0 %>
-    <p class="text-danger"> Data Mismatch, Initial Default: 0 %>; computed: <%= total_shares %>.</p>
-  <% else %>
-    <p class="text-success"> All Shares Tallied.</p>
-  <% end %>
+    <% if total_shares.round(2) != 0 %>
+      <p class="text-danger"> Data Mismatch, Initial Default: 0 %>; computed: <%= total_shares %>.</p>
+    <% else %>
+      <p class="text-success"> All Shares Tallied.</p>
+    <% end %>
 
-</div>
+  </div>
+</section>

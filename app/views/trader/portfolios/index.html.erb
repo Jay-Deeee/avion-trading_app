@@ -1,60 +1,68 @@
-<h3>Portfolios</h3>
-<div>Balance: <%= number_with_delimiter(@balance, delimiter: ",", precision: 2) %></div>
-<div>
-  <%= render partial: 'trader/portfolios/form' %>
-</div>
-<div>Overall Value: <%= number_with_delimiter(@total_value, delimiter: ",", precision: 2) %></div>
-</br>
-<div>
-  <% if @portfolios_active.any? %>
-    <div class="container">
-      <ul class="row list-group-horizontal">
-        <li class="col list-group-item fw-bold">SYMBOL / NAME</li>
-        <li class="col list-group-item fw-bold">TOTAL SHARES</li>
-        <li class="col list-group-item fw-bold">CURRENT PRICE</li>
-        <li class="col list-group-item fw-bold">VALUE</li>
-      </ul>
+<section class="txn-body">
+  <div class="table-container txn-table txn-item-1">
+    <h3>Portfolios</h3>
+    <div>Balance: <%= number_with_delimiter(@balance, delimiter: ",", precision: 2) %></div>
+    <div>
+      <%= render partial: 'trader/portfolios/form' %>
     </div>
+    <div>Overall Value: <%= number_with_delimiter(@total_value, delimiter: ",", precision: 2) %></div>
+    <br />
+    <div>
+      <% if @portfolios_active.any? %>
+        <div class="container">
+          <ul class="row list-group-horizontal">
+            <li class="col list-group-item fw-bold">SYMBOL / NAME</li>
+            <li class="col list-group-item fw-bold">TOTAL SHARES</li>
+            <li class="col list-group-item fw-bold">CURRENT PRICE</li>
+            <li class="col list-group-item fw-bold">VALUE</li>
+          </ul>
+          <div class="table-head-divider txn-head-divider"></div>
+        </div>
 
-    <% @portfolios_active_info.each do |info| %>
-      <div class="container">
-        <ul class="row list-group-horizontal">
-          <li class="col list-group-item">
-            <%= link_to info[:symbol], trader_portfolio_path(info[:id]) %></br>
-            <small><%= info[:name] %></small>
-          </li>
-          <li class="col list-group-item"><%= info[:shares] %></li>
-          <li class="col list-group-item">USD <%= number_with_delimiter(info[:price], delimiter: ",", precision: 2) %></li>
-          <li class="col list-group-item">USD <%= number_with_delimiter(info[:value], delimiter: ",", precision: 2) %></li>
-        </ul>
-      </div>
-    <% end %>
-  <% else %>
-    <p class="container">
-      <em>
-        Buy new stocks to add to your portfolio —
-        <%= link_to "Go to Transactions", trader_transactions_path %>.
-      </em>
-    </p>
-  <% end %>
-</div>
-
-<h3>Top Companies</h3>
-<div>
-  <% if @symbols.any? %>
-    <div class="container">
-      <ul class="row">
-        <% @symbols.each_slice(3) do |symbols_row| %>
-          <% symbols_row.each do |symbol| %>
-            <li class="col-4">
-              <%= link_to symbol[0], trader_transactions_path %><br>
-              <small><%= symbol[1] %></small>
-            </li>
-          <% end %>
+        <% @portfolios_active_info.each do |info| %>
+          <div class="container">
+            <ul class="row list-group-horizontal">
+              <li class="col list-group-item">
+                <%= link_to info[:symbol], trader_portfolio_path(info[:id]) %><br />
+                <small><%= info[:name] %></small>
+              </li>
+              <li class="col list-group-item"><%= info[:shares] %></li>
+              <li class="col list-group-item">USD <%= number_with_delimiter(info[:price], delimiter: ",", precision: 2) %></li>
+              <li class="col list-group-item">USD <%= number_with_delimiter(info[:value], delimiter: ",", precision: 2) %></li>
+            </ul>
+            <div class="table-item-divider txn-item-divider"></div>
+          </div>
         <% end %>
-      </ul>
+      <% else %>
+        <p class="container">
+          <em>
+            Buy new stocks to add to your portfolio —
+            <%= link_to "Go to Transactions", trader_transactions_path %>.
+          </em>
+        </p>
+      <% end %>
     </div>
-  <% else %>
-    <p class="container"><em>Top Companies list is empty.</em></p>
-  <% end %>
-</div>
+  </div>
+
+  <div id="top-stocks" class="txn-item-2 devise-new">
+    <h3>Top Companies</h3>
+    <div>
+      <% if @symbols.any? %>
+        <div class="container">
+          <ul class="row">
+            <% @symbols.each_slice(3) do |symbols_row| %>
+              <% symbols_row.each do |symbol| %>
+                <li class="col-4 top-stocks-container">
+                  <%= link_to symbol[0], trader_transactions_path %>
+                  <small><%= symbol[1] %></small>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% else %>
+        <p class="container"><em>Top Companies list is empty.</em></p>
+      <% end %>
+    </div>
+  </div>
+</section>

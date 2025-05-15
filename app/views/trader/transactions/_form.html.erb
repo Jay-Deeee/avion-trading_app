@@ -1,19 +1,33 @@
 <div data-controller="stock-price">
   <%= form_with model: transaction, url: trader_transactions_path, local: true do |form| %>
-    <%= form.label :symbol %>
-    <%= form.select :symbol, 
-      symbols.collect { |name, symbol| [name, symbol] }, 
-      { prompt: "Select a Stock" }, 
-      { data: { stock_price_target: "symbol", action: "change->stock-price#fetchPrice" } } %>
+    <div>
+      <div>
+        <%= form.label :symbol %>
+        <%= 
+          form.select :symbol, 
+          symbols.collect { |name, symbol| [name, symbol] }, 
+          { prompt: "Select a Stock" }, 
+          { data: { stock_price_target: "symbol", action: "change->stock-price#fetchPrice" } } 
+        %>
+      </div>
 
-    <div id="stock_price" data-stock-price-target="price" style="margin-top: 10px;"></div>
+      <div id="stock_price" data-stock-price-target="price" style="margin-top: 10px;"></div>
 
-    <%= form.label :shares %>
-    <%= form.number_field :shares, step: 0.01, min: 0.01 %>
+      <div>
+        <%= form.label :shares %>
+        <%= form.number_field :shares, step: 0.01, min: 0.01 %>
+      </div>
 
-    <%= form.label :action_type %>
-    <%= form.select :action_type, options_for_select([['Buy', 'buy'], ['Sell', 'sell']]), prompt: "Select Action" %>
+      <br />
 
-    <%= form.submit "Submit" %>
+      <div>
+        <%= form.label :action_type %>
+        <%= form.select :action_type, options_for_select([['Buy', 'buy'], ['Sell', 'sell']]), prompt: "Select Action" %>
+      </div>
+
+      <br />
+
+      <%= form.submit "Submit", class: "btn btn-primary" %>
+    </div>
   <% end %>
 </div>

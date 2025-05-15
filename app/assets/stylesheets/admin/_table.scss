@@ -1,0 +1,30 @@
+.table-head-divider {
+  @include divider;
+  color: #000000;
+  height: 2px;
+  width: 90%;
+  margin: -10px 0 10px 0;
+}
+
+.table-item-divider {
+  @include divider;
+  width: 88.5%;
+  margin-top: -10px;
+  margin-left: 10px;
+}
+
+.txn-head-divider {
+  width: 95%;
+}
+
+.txn-item-divider {
+  width: 93.5%;
+}
+
+.pending-head-divider {
+  width: 80%;
+}
+
+.pending-item-divider {
+  width: 78.5%;
+}

@@ -1,5 +1,5 @@
 <%= form_with(model: [:admin, @user], local: true) do |form| %>
-  <div>
+  <div class="form-field">
     <%= form.label :first_name %>
     <%= form.text_field :first_name %>
     <% @user.errors.full_messages_for(:first_name).each do |message| %>
@@ -7,7 +7,7 @@
     <% end %>
   </div>
 
-  <div>
+  <div class="form-field">
     <%= form.label :last_name %>
     <%= form.text_field :last_name %>
     <% @user.errors.full_messages_for(:last_name).each do |message| %>
@@ -16,7 +16,7 @@
   </div>
 
   <% if user.new_record? %>
-    <div>
+    <div class="form-field">
       <%= form.label :email %>
       <%= form.email_field :email %>
       <% @user.errors.full_messages_for(:email).each do |message| %>
@@ -25,14 +25,14 @@
     </div>
   <% end %>
 
-  <div>
+  <div class="form-field">
     <%= form.label :balance %>
     <%= form.number_field :balance, step: 0.01 %>
     <% @user.errors.full_messages_for(:balance).each do |message| %>
       <div><%= message %></div>
     <% end %>
   </div>
-
+  <br />
   <div>
     <%= form.label :is_admin, "User Type" %>
     <%= form.select :is_admin, [["Trader", false], ["Admin", true]] %>
@@ -40,8 +40,8 @@
       <div><%= message %></div>
     <% end %>
   </div>
-
+  <br />
   <div>
-    <%= form.submit @user.persisted? ? "Update User" : "Create User" %>
+    <%= form.submit @user.persisted? ? "Update User" : "Create User", class: "btn btn-success" %>
   </div>
 <% end %>
