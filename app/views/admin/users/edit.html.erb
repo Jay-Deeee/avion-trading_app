@@ -1,2 +1,6 @@
-<h1>Edit Credentials for <%= @user.full_name %></h1>
-<%= render "form", user: @user %>
+<section class="devise-new">
+  <div class="log-container">
+    <h3>Edit User: <%= @user.full_name %></h3>
+    <%= render "form", user: @user %>
+  </div>
+</section>

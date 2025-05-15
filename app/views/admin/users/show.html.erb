@@ -1,18 +1,21 @@
-<section>
-  <div class="d-flex gap-5">
-    <h4><%= @user.full_name %></h4>
-    <%= link_to edit_admin_user_path(@user), title: "Edit User Information" do %>
-      <i class="fas fa-edit"></i>
-    <% end %>
-    <%= link_to edit_password_admin_user_path(@user), title: "Change User Password" do %>
-      <i class="fas fa-key"></i>
-    <% end %>
-  </div>
-  <p>E-mail: <%= @user.email %></p>
-  <p>Balance: <%= @user.balance %></p>
-  <p>Member since: <%= @user.created_at.strftime("%b %d, %Y at %-I:%M %p") %></p>
-  <p>
-    <% color = @user.is_admin == true ? "green" : "red" %>
-    User Type: <span style="color: <%= color %>; font-weight: 900;"><%= @user.is_admin == true ? "Admin" : "Trader" %></span>
+<section class="devise-new">
+  <div class="log-container">
+    <div class="d-flex gap-5">
+      <h4><%= @user.full_name %></h4>
+      <%= link_to edit_admin_user_path(@user), title: "Edit User Information" do %>
+        <i class="fas fa-edit"></i>
+      <% end %>
+      <%= link_to edit_password_admin_user_path(@user), title: "Change User Password" do %>
+        <i class="fas fa-key"></i>
+      <% end %>
+    </div>
+    <br />
+    <p>E-mail: <%= @user.email %></p>
+    <p>Balance: <%= @user.balance %></p>
+    <p>Member since: <%= @user.created_at.strftime("%b %d, %Y at %-I:%M %p") %></p>
+    <p>
+      <% color = @user.is_admin == true ? "green" : "red" %>
+      User Type: <span style="color: <%= color %>; font-weight: 900;"><%= @user.is_admin == true ? "Admin" : "Trader" %></span>
   </p>
+  </div>
 </section>

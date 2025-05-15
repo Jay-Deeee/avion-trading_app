@@ -1,36 +1,44 @@
-<h3>All Transactions</h3>
-<div>
-  <div class="container">
-    <ul class="row list-group-horizontal">
-      <li class="col list-group-item fw-bold">OWNER</li>
-      <li class="col list-group-item fw-bold">NAME</li>
-      <li class="col list-group-item fw-bold">SYMBOL</li>
-      <li class="col list-group-item fw-bold">SHARES</li>
-      <li class="col list-group-item fw-bold">PRICE</li>
-      <li class="col list-group-item fw-bold">TOTAL</li>
-      <li class="col list-group-item fw-bold">DATE</li>
-      <li class="col list-group-item fw-bold">TYPE</li>
-    </ul>
-  </div>
-  <% if @transactions.any? %>
-    <% @transactions.each do |txn| %>
-      <div class="container">
-        <ul class="row list-group-horizontal">
-          <li class="col list-group-item"><%= link_to "#{txn.user.full_name}", admin_transaction_path(txn) %></li>
-          <li class="col list-group-item"><%= @symbol_name[txn.symbol] %></li>
-          <li class="col list-group-item"><%= txn.symbol %></li>
-          <li class="col list-group-item"><%= txn.shares %></li>
-          <li class="col list-group-item">USD <%= txn.price %></li>
-          <li class="col list-group-item">USD <%= txn.total %></li>
-          <li class="col list-group-item"><%= txn.created_at.strftime("%b %d, %Y at %-I:%M %p") %></li>
-          <li class="col list-group-item">
-            <% color = txn.action_type == "buy" ? "green" : "red" %>
-            <span style="color: <%= color %>; font-weight: 900;"><%= txn.action_type.upcase %></span>
-          </li>
-        </ul>
-      </div>
+<section class="table-container">
+  <h3>All Transactions</h3>
+  <div>
+    <div class="container">
+      <ul class="row list-group-horizontal">
+        <li class="col list-group-item fw-bold">OWNER</li>
+        <li class="col list-group-item fw-bold">NAME</li>
+        <li class="col list-group-item fw-bold">SYMBOL</li>
+        <li class="col list-group-item fw-bold">SHARES</li>
+        <li class="col list-group-item fw-bold">PRICE</li>
+        <li class="col list-group-item fw-bold">TOTAL</li>
+        <li class="col list-group-item fw-bold">DATE</li>
+        <li class="col list-group-item fw-bold">TYPE</li>
+      </ul>
+      <div class="table-head-divider txn-head-divider"></div>
+    </div>
+    <% if @transactions.any? %>
+      <% @transactions.each do |txn| %>
+        <div class="container">
+          <ul class="row list-group-horizontal">
+            <li class="col list-group-item"><%= link_to "#{txn.user.full_name}", admin_transaction_path(txn) %></li>
+            <li class="col list-group-item"><%= @symbol_name[txn.symbol] %></li>
+            <li class="col list-group-item"><%= txn.symbol %></li>
+            <li class="col list-group-item"><%= txn.shares %></li>
+            <li class="col list-group-item">USD <%= txn.price %></li>
+            <li class="col list-group-item">USD <%= txn.total %></li>
+            <li class="col list-group-item">
+              <%= txn.created_at.strftime("%b %d, %Y") %>
+              <br />
+              <%= txn.created_at.strftime("at %-I:%M %p") %>
+            </li>
+            <li class="col list-group-item">
+              <% color = txn.action_type == "buy" ? "green" : "red" %>
+              <span style="color: <%= color %>; font-weight: 900;"><%= txn.action_type.upcase %></span>
+            </li>
+          </ul>
+          <div class="table-item-divider txn-item-divider"></div>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="container"><em>No transactions.</em></p>
     <% end %>
-  <% else %>
-    <p class="container"><em>No transactions.</em></p>
-  <% end %>
-</div>
+  </div>
+</section>

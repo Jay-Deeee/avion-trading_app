@@ -1,0 +1,22 @@
+.txn-body {
+  display: grid;
+  grid-template-columns: 80% 20%;
+}
+
+.txn-table {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.txn-item-1 {
+  grid-column: 1;
+}
+
+.txn-item-2 {
+  grid-column: 2;
+  height: 100vh;
+}
+
+.txn-form {
+  max-width: 310px;
+}
